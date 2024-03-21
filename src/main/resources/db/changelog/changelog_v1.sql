@@ -1,0 +1,51 @@
+CREATE TABLE korisnik (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    korisnicko_ime VARCHAR(256) NOT NULL,
+    lozinka VARCHAR(256) NOT NULL,
+    vreme_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vreme_poslednje_izmene TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE statistika (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    datum DATE NOT NULL,
+    broj_popunjenih_formulara INT NOT NULL
+);
+
+CREATE TABLE formular (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    naziv VARCHAR(256),
+    vreme_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vreme_poslednje_izmene TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE polje (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_formular INT NOT NULL,
+    naziv VARCHAR(256),
+    prikazni_redosled INT NOT NULL,
+    tip ENUM('TEKST', 'BROJ') NOT NULL,
+    vreme_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vreme_poslednje_izmene TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT FK_FORMULAR_POLJE FOREIGN KEY (id_formular) REFERENCES formular(id)
+);
+
+CREATE TABLE formular_popunjen (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_formular INT NOT NULL,
+    vreme_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vreme_poslednje_izmene TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT FK_FORMULAR_FORMULAR_POPUNJEN FOREIGN KEY (id_formular) REFERENCES formular(id)
+);
+
+CREATE TABLE polje_popunjeno (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_formular_popunjen INT NOT NULL,
+    id_polje INT NOT NULL,
+    vrednost_tekst VARCHAR(256),
+    vrednost_broj DOUBLE,
+    vreme_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vreme_poslednje_izmene TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT FK_FORMULAR_POPUNJEN FOREIGN KEY (id_formular_popunjen) REFERENCES formular_popunjen(id),
+    CONSTRAINT FK_POLJE FOREIGN KEY (id_polje) REFERENCES polje(id)
+);
