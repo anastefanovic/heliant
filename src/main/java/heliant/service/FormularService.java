@@ -1,15 +1,17 @@
 package heliant.service;
 
+import heliant.dto.PageableFormularDto;
 import heliant.entity.Formular;
 import heliant.entity.Korisnik;
 import heliant.exception.ResourceNotFoundException;
 import heliant.repository.FormularRepository;
 import heliant.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +34,9 @@ public class FormularService {
                 );
     }
 
-    public Stream<Formular> procitajSveFormulare() {
-        Iterable<Formular> allFormular = formularRepository.findAll();
-        return StreamSupport.stream(allFormular.spliterator(), false);
+    public Page<Formular> procitajSveFormulare(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return formularRepository.findAll(pageable);
     }
 
     public Formular azurirajFormular(int id, Formular formular) {

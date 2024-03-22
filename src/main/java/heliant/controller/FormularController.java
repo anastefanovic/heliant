@@ -1,14 +1,15 @@
 package heliant.controller;
 
 import heliant.dto.FormularDto;
+import heliant.dto.PageableFormularDto;
 import heliant.entity.Formular;
 import heliant.mapper.FormularMapper;
 import heliant.service.FormularService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/formular")
@@ -32,9 +33,21 @@ public class FormularController {
     }
 
     @GetMapping("/read")
-    public List<FormularDto> procitajSveFormulare() {
-        Stream<Formular> allFormular = formularService.procitajSveFormulare();
-        return allFormular.map(formularMapper::entityToDto).toList();
+    public PageableFormularDto procitajSveFormulare(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize
+    ) {
+        Page<Formular> formularPage = formularService.procitajSveFormulare(pageNumber, pageSize);
+        List<FormularDto> formularList = formularPage.getContent()
+                .stream().map(formularMapper::entityToDto).toList();
+
+        return new PageableFormularDto(
+                formularList,
+                formularPage.getNumber(),
+                formularPage.getSize(),
+                formularPage.getTotalElements(),
+                formularPage.getTotalPages()
+        );
     }
 
     @PutMapping("/update")
