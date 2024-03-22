@@ -1,8 +1,10 @@
 package heliant.security;
 
+import heliant.enumeration.Rola;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,6 +30,31 @@ public class SecurityFilter {
                 .authorizeHttpRequests(authConfig -> {
                     authConfig.requestMatchers("/auth/**").permitAll();
                     authConfig.requestMatchers("/error").permitAll();
+
+                    authConfig.requestMatchers( HttpMethod.GET,"/formular/read/**")
+                            .hasAnyAuthority(Rola.ADMIN.name(), Rola.RADNIK.name());
+                    authConfig.requestMatchers( HttpMethod.POST, "/formular/create")
+                            .hasAuthority(Rola.ADMIN.name());
+                    authConfig.requestMatchers(HttpMethod.PUT, "/formular/update")
+                            .hasAuthority(Rola.ADMIN.name());
+                    authConfig.requestMatchers(HttpMethod.DELETE, "/formular/delete/**")
+                            .hasAuthority(Rola.ADMIN.name());
+
+                    authConfig.requestMatchers( HttpMethod.GET,"/polje/read/**")
+                            .hasAnyAuthority(Rola.ADMIN.name(), Rola.RADNIK.name());
+                    authConfig.requestMatchers( HttpMethod.POST, "/polje/create")
+                            .hasAuthority(Rola.ADMIN.name());
+                    authConfig.requestMatchers(HttpMethod.PUT, "/polje/update")
+                            .hasAuthority(Rola.ADMIN.name());
+                    authConfig.requestMatchers(HttpMethod.DELETE, "/polje/delete/**")
+                            .hasAuthority(Rola.ADMIN.name());
+
+                    authConfig.requestMatchers("/formular_popunjen/**")
+                            .hasAnyAuthority(Rola.ADMIN.name(), Rola.RADNIK.name());
+
+                    authConfig.requestMatchers("/polje_popunjeno/**")
+                            .hasAnyAuthority(Rola.ADMIN.name(), Rola.RADNIK.name());
+
                     authConfig.anyRequest().denyAll();
                 });
 

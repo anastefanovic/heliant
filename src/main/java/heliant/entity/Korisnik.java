@@ -2,6 +2,8 @@ package heliant.entity;
 
 import heliant.enumeration.Rola;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,9 +25,13 @@ public class Korisnik implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull(message = "Korisnicko ime ne sme biti prazno")
+    @NotBlank(message = "Korisnicko ime ne sme biti prazno")
     @Column(name = "korisnicko_ime", nullable = false)
     private String korisnickoIme;
 
+    @NotNull(message = "Lozinka ne sme biti prazna")
+    @NotBlank(message = "Lozinka ne sme biti prazna")
     @Column(name = "lozinka", nullable = false)
     private String lozinka;
 

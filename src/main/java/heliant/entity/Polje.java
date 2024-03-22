@@ -50,9 +50,8 @@ public class Polje {
         vremePoslednjeIzmene = LocalDateTime.now();
     }
 
-    public Polje(String naziv, int prikazniRedosled, Tip tip) {
+    public Polje(String naziv, Tip tip) {
         this.naziv = naziv;
-        this.prikazniRedosled = prikazniRedosled;
         this.tip = tip;
     }
 }

@@ -1,6 +1,7 @@
 package heliant.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class Statistika {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull(message = "Datum ne sme biti prazan")
     @Column(name = "datum", nullable = false)
     private LocalDate datum;
 
