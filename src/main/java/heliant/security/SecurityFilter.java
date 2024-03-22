@@ -29,6 +29,7 @@ public class SecurityFilter {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authConfig -> {
                     authConfig.requestMatchers("/auth/**").permitAll();
+                    authConfig.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     authConfig.requestMatchers("/error").permitAll();
 
                     authConfig.requestMatchers( HttpMethod.GET,"/formular/read/**")
