@@ -17,4 +17,6 @@ public class PoljeDto {
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
     private int idFormular;
+    private int idKorisnikKreirao;
+    private int idKorisnikPoslednjiAzurirao;
 }

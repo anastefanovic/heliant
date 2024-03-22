@@ -7,6 +7,8 @@ import heliant.repository.KorisnikRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,14 @@ public class AuthenticationService {
         String token = jwtService.generateToken(korisnik, generateExtraClaims(korisnik));
         return new AuthenticationResponseDto(token);
     }
+
+    public Korisnik extractUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String korisnickoIme = authentication.getName();
+        return korisnikRepository.findByKorisnickoIme(korisnickoIme).get();
+    }
+
+
 
     private Map<String, Object> generateExtraClaims(Korisnik korisnik) {
         Map<String, Object> extraClaims = new HashMap<>();

@@ -1,6 +1,7 @@
 package heliant.service;
 
 import heliant.entity.FormularPopunjen;
+import heliant.entity.Korisnik;
 import heliant.entity.Polje;
 import heliant.entity.PoljePopunjeno;
 import heliant.enumeration.Tip;
@@ -10,6 +11,7 @@ import heliant.exception.TypeNotSupportedException;
 import heliant.repository.FormularPopunjenRepository;
 import heliant.repository.PoljePopunjenoRepository;
 import heliant.repository.PoljeRepository;
+import heliant.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class PoljePopunjenoService {
     private final PoljePopunjenoRepository poljePopunjenoRepository;
     private final FormularPopunjenRepository formularPopunjenRepository;
     private final PoljeRepository poljeRepository;
+    private final AuthenticationService authenticationService;
 
     public PoljePopunjeno kreirajPoljePopunjeno(
             int idFormularPopunjen,
@@ -40,6 +43,9 @@ public class PoljePopunjenoService {
 
         poljepopunjeno.setPolje(polje);
         poljepopunjeno.setFormularPopunjen(formularPopunjen);
+
+        Korisnik korisnikKreirao = authenticationService.extractUser();
+        poljepopunjeno.setKorisnikKreirao(korisnikKreirao);
 
         if(polje.getFormular().getId() != formularPopunjen.getFormular().getId()) {
             throw new ResourceNotValidException(
@@ -90,6 +96,9 @@ public class PoljePopunjenoService {
 
         poljePopunjenoToUpdate.setVrednostTekst(poljePopunjeno.getVrednostTekst());
         poljePopunjenoToUpdate.setVrednostBroj(poljePopunjeno.getVrednostBroj());
+
+        Korisnik korisnikPoslednjiAzurirao = authenticationService.extractUser();
+        poljePopunjenoToUpdate.setKorisnikPoslednjiAzurirao(korisnikPoslednjiAzurirao);
 
         return poljePopunjenoRepository.save(poljePopunjenoToUpdate);
     }

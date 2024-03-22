@@ -34,6 +34,14 @@ public class Polje {
     private LocalDateTime vremePoslednjeIzmene;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_korisnik_kreirao", referencedColumnName = "id")
+    private Korisnik korisnikKreirao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_korisnik_poslednji_azurirao", referencedColumnName = "id")
+    private Korisnik korisnikPoslednjiAzurirao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_formular", referencedColumnName = "id", nullable = false)
     private Formular formular;
 

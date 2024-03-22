@@ -28,6 +28,14 @@ public class PoljePopunjeno {
     @Column(name = "vreme_poslednje_izmene")
     private LocalDateTime vremePoslednjeIzmene;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_korisnik_kreirao", referencedColumnName = "id")
+    private Korisnik korisnikKreirao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_korisnik_poslednji_azurirao", referencedColumnName = "id")
+    private Korisnik korisnikPoslednjiAzurirao;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_polje", referencedColumnName = "id", nullable = false)
     private Polje polje;

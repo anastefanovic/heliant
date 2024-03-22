@@ -16,4 +16,6 @@ public class PoljePopunjenoDto {
     private LocalDateTime vremePoslednjeIzmene;
     private int idFormularPopunjen;
     private int idPolje;
+    private int idKorisnikKreirao;
+    private int idKorisnikPoslednjiAzurirao;
 }

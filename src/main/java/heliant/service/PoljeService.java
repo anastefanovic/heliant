@@ -1,10 +1,12 @@
 package heliant.service;
 
 import heliant.entity.Formular;
+import heliant.entity.Korisnik;
 import heliant.entity.Polje;
 import heliant.exception.ResourceNotFoundException;
 import heliant.repository.FormularRepository;
 import heliant.repository.PoljeRepository;
+import heliant.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class PoljeService {
 
     private final PoljeRepository poljeRepository;
     private final FormularRepository formularRepository;
+    private final AuthenticationService authenticationService;
 
     public Polje kreirajPolje(int idFormular, Polje polje) {
         Formular formular = formularRepository.findById(idFormular).orElseThrow(
@@ -26,6 +29,9 @@ public class PoljeService {
         polje.setFormular(formular);
 
         generatePrikazniRedosled(polje);
+
+        Korisnik korisnikKreirao = authenticationService.extractUser();
+        polje.setKorisnikKreirao(korisnikKreirao);
 
         return poljeRepository.save(polje);
     }
@@ -61,6 +67,9 @@ public class PoljeService {
         poljeToUpdate.setNaziv(polje.getNaziv());
         poljeToUpdate.setPrikazniRedosled(polje.getPrikazniRedosled());
         poljeToUpdate.setTip(polje.getTip());
+
+        Korisnik korisnikPoslednjiAzurirao = authenticationService.extractUser();
+        poljeToUpdate.setKorisnikPoslednjiAzurirao(korisnikPoslednjiAzurirao);
 
         return poljeRepository.save(poljeToUpdate);
     }

@@ -2,12 +2,14 @@ package heliant.service;
 
 import heliant.entity.Formular;
 import heliant.entity.FormularPopunjen;
+import heliant.entity.Korisnik;
 import heliant.entity.PoljePopunjeno;
 import heliant.exception.ResourceNotFoundException;
 import heliant.exception.ResourceNotValidException;
 import heliant.exception.TypeNotSupportedException;
 import heliant.repository.FormularPopunjenRepository;
 import heliant.repository.FormularRepository;
+import heliant.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class FormularPopunjenService {
     private final FormularPopunjenRepository formularPopunjenRepository;
     private final FormularRepository formularRepository;
     private final PoljePopunjenoService poljePopunjenoService;
+    private final AuthenticationService authenticationService;
 
     public FormularPopunjen kreirajFormularPopunjen(
             int idFormular,
@@ -43,6 +46,9 @@ public class FormularPopunjenService {
         FormularPopunjen formularPopunjen = new FormularPopunjen();
         formularPopunjen.setFormular(formular);
 
+        Korisnik korisnikKreirao = authenticationService.extractUser();
+        formularPopunjen.setKorisnikKreirao(korisnikKreirao);
+
         List<PoljePopunjeno> listToSave = poljePopunjenoList.stream().map(p -> {
             if(p.getPolje().getFormular().getId() != idFormular) {
                 throw new ResourceNotValidException(
@@ -57,6 +63,7 @@ public class FormularPopunjenService {
             }
 
             p.setFormularPopunjen(formularPopunjen);
+            p.setKorisnikKreirao(korisnikKreirao);
             return p;
         }).toList();
 
@@ -64,8 +71,6 @@ public class FormularPopunjenService {
 
         return formularPopunjenRepository.save(formularPopunjen);
     }
-
-
 
     public FormularPopunjen procitajFormularPopunjen(int id) {
         return formularPopunjenRepository.findById(id)

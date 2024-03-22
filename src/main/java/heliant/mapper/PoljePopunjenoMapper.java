@@ -1,6 +1,7 @@
 package heliant.mapper;
 
 import heliant.dto.PoljePopunjenoDto;
+import heliant.entity.Korisnik;
 import heliant.entity.PoljePopunjeno;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,9 @@ public class PoljePopunjenoMapper implements Mapper<PoljePopunjenoDto, PoljePopu
 
     @Override
     public PoljePopunjenoDto entityToDto(PoljePopunjeno entity) {
+        Korisnik korisnikKreirao = entity.getKorisnikKreirao();
+        Korisnik korisnikPoslednjiAzurirao = entity.getKorisnikPoslednjiAzurirao();
+
         return new PoljePopunjenoDto(
                 entity.getId(),
                 entity.getVrednostTekst(),
@@ -23,7 +27,9 @@ public class PoljePopunjenoMapper implements Mapper<PoljePopunjenoDto, PoljePopu
                 entity.getVremeKreiranja(),
                 entity.getVremePoslednjeIzmene(),
                 entity.getFormularPopunjen().getId(),
-                entity.getPolje().getId()
+                entity.getPolje().getId(),
+                (korisnikKreirao != null) ? korisnikKreirao.getId() : -1,
+                (korisnikPoslednjiAzurirao != null) ? korisnikPoslednjiAzurirao.getId() : -1
         );
     }
 }

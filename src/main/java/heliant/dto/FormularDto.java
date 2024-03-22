@@ -13,4 +13,6 @@ public class FormularDto {
     private String naziv;
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
+    private int idKorisnikKreirao;
+    private int idKorisnikPoslednjiAzurirao;
 }
